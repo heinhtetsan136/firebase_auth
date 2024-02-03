@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "777116743505",
+    "project_id": "login-logout-1eaff",
+    "storage_bucket": "login-logout-1eaff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:777116743505:android:c8b58e4a264584c2cdc570",
+        "android_client_info": {
+          "package_name": "com.example.login_logout"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyikKDE2v6cMA8Mcd4r3tVXUTw_hQ5kQk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
