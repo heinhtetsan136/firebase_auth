@@ -17,6 +17,7 @@ class RegisterBloc extends Bloc<RegisterBaseEvent, RegisterBaseState> {
       if (result.isError) {
         return emit(RegisterFailedState(result.error.toString()));
       }
+      await _auth.currentUser?.sendEmailVerification();
       emit(const RegisterSucessState());
     });
   }

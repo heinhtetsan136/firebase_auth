@@ -6,11 +6,17 @@ import 'package:login_logout/controller/home/home_bloc.dart';
 import 'package:login_logout/controller/home/home_state.dart';
 import 'package:login_logout/controller/login/login_bloc.dart';
 import 'package:login_logout/controller/register/register_bloc.dart';
+import 'package:login_logout/controller/upade_username/update_username_cubic.dart';
+import 'package:login_logout/controller/update_email/update_email_bloc.dart';
+import 'package:login_logout/controller/update_password/update_password_cubic.dart';
 import 'package:login_logout/repositories/AuthService.dart';
 import 'package:login_logout/screen/forgetpassword_screen.dart';
 import 'package:login_logout/screen/home_screen.dart';
 import 'package:login_logout/screen/login_screen.dart';
 import 'package:login_logout/screen/register_screen.dart';
+import 'package:login_logout/screen/update_email_screen.dart';
+import 'package:login_logout/screen/update_password_screen.dart';
+import 'package:login_logout/screen/update_username_screen.dart';
 
 List<String> protectroute = ["/", "/login", "/register"];
 
@@ -19,6 +25,9 @@ abstract class RouteName {
   static const String home = "/";
   static const String register = "/register";
   static const String forgetpassword = "/password";
+  static const String updateUserName = "/updateusername";
+  static const String updateEmail = "/updateemail";
+  static const String updatepassword = "/updatepassword";
 }
 
 Route? _protectedroute(String path, Widget child, RouteSettings setting) {
@@ -46,6 +55,32 @@ Route? router(RouteSettings setting) {
           BlocProvider(
               child: const ForgetPassword(),
               create: (_) => ForgetPasswordCubit()),
+          setting);
+    case RouteName.updatepassword:
+      return _protectedroute(
+          incomingroute,
+          BlocProvider(
+            create: (_) =>
+                UpdatePasswordCubic(Injection<AuthService>().currentUser!),
+            child: const UpdatePassword(),
+          ),
+          setting);
+    case RouteName.updateUserName:
+      return _protectedroute(
+          incomingroute,
+          BlocProvider(
+              create: (_) =>
+                  UpdateUserNameCubic(Injection<AuthService>().currentUser!),
+              child: const UpdateUsername()),
+          setting);
+    case RouteName.updateEmail:
+      return _protectedroute(
+          incomingroute,
+          BlocProvider(
+            create: (_) =>
+                UpdateEmailCubic(Injection<AuthService>().currentUser!),
+            child: const UpdateEmail(),
+          ),
           setting);
     case RouteName.home:
       return _protectedroute(

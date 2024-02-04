@@ -8,6 +8,10 @@ class DisplayNameChangeEvent extends HomeBaseEvent {
   const DisplayNameChangeEvent();
 }
 
+class UploadProfileEvent extends HomeBaseEvent {
+  const UploadProfileEvent();
+}
+
 class PasswordChangeEvent extends HomeBaseEvent {
   const PasswordChangeEvent();
 }

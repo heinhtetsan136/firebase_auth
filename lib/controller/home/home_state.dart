@@ -28,3 +28,11 @@ class HomeSignoutState extends HomeBaseState {
 class HomeUserChangedState extends HomeBaseState {
   const HomeUserChangedState(super.user);
 }
+
+class UploadProfile extends HomeBaseState {
+  const UploadProfile([super.user]);
+}
+
+class ImageUploadLoadingState extends HomeBaseState {
+  const ImageUploadLoadingState(super.user);
+}
