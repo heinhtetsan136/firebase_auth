@@ -17,15 +17,24 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,39 +52,11 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBWW3UK0BMKuwUamV2-zeHFL9b3UPY1D20',
-    appId: '1:777116743505:web:09ec05ce361a86f4cdc570',
-    messagingSenderId: '777116743505',
-    projectId: 'login-logout-1eaff',
-    authDomain: 'login-logout-1eaff.firebaseapp.com',
-    storageBucket: 'login-logout-1eaff.appspot.com',
-    measurementId: 'G-R2STWS6TDW',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCyikKDE2v6cMA8Mcd4r3tVXUTw_hQ5kQk',
     appId: '1:777116743505:android:c8b58e4a264584c2cdc570',
     messagingSenderId: '777116743505',
     projectId: 'login-logout-1eaff',
     storageBucket: 'login-logout-1eaff.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDfgmj02v69liqcOhz96u-pK30JgponLjA',
-    appId: '1:777116743505:ios:e76db34ce97ee4becdc570',
-    messagingSenderId: '777116743505',
-    projectId: 'login-logout-1eaff',
-    storageBucket: 'login-logout-1eaff.appspot.com',
-    iosBundleId: 'com.example.loginLogout',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDfgmj02v69liqcOhz96u-pK30JgponLjA',
-    appId: '1:777116743505:ios:cd8eda9019af867dcdc570',
-    messagingSenderId: '777116743505',
-    projectId: 'login-logout-1eaff',
-    storageBucket: 'login-logout-1eaff.appspot.com',
-    iosBundleId: 'com.example.loginLogout.RunnerTests',
   );
 }

@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:login_logout/Injection.dart';
 import 'package:login_logout/controller/update_password/update_password_state.dart';
-import 'package:login_logout/repositories/AuthService.dart';
 
 class UpdatePasswordCubic extends Cubit<UpdatePasswordState> {
   final User user;
@@ -14,7 +12,7 @@ class UpdatePasswordCubic extends Cubit<UpdatePasswordState> {
   final GlobalKey<FormState> formstate = GlobalKey<FormState>();
   final FocusNode focusNode = FocusNode();
   final FocusNode passwordfocusNode = FocusNode();
-  final AuthService _auth = Injection<AuthService>();
+  // final AuthService _auth = Injection<AuthService>();
 
   Future<void> UpdateEmail(
     String password,

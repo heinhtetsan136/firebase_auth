@@ -30,6 +30,10 @@ class MainApp extends StatelessWidget {
 
       ///important
       theme: theme.copyWith(
+          floatingActionButtonTheme: const FloatingActionButtonThemeData(
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+          ),
           colorScheme: const ColorScheme.light().copyWith(
             primary: Colors.blue,
           ),

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
@@ -14,6 +15,7 @@ Future<void> setup() async {
   Injection.registerLazySingleton<ImagePicker>(() => ImagePicker());
   Injection.registerLazySingleton<FirebaseStorage>(
       () => FirebaseStorage.instance);
+  Injection.registerLazySingleton(() => FirebaseFirestore.instance);
 //   Injection.registerSingleton<AppModel>(AppModel());
 
 // // Alternatively you could write it if you don't like global variables

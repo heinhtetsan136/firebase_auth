@@ -5,11 +5,13 @@ import 'package:login_logout/controller/forget_password/forget_password_cubit.da
 import 'package:login_logout/controller/home/home_bloc.dart';
 import 'package:login_logout/controller/home/home_state.dart';
 import 'package:login_logout/controller/login/login_bloc.dart';
+import 'package:login_logout/controller/note_create/note_create_cubic.dart';
 import 'package:login_logout/controller/register/register_bloc.dart';
 import 'package:login_logout/controller/upade_username/update_username_cubic.dart';
 import 'package:login_logout/controller/update_email/update_email_bloc.dart';
 import 'package:login_logout/controller/update_password/update_password_cubic.dart';
 import 'package:login_logout/repositories/AuthService.dart';
+import 'package:login_logout/screen/create_post_screen.dart';
 import 'package:login_logout/screen/forgetpassword_screen.dart';
 import 'package:login_logout/screen/home_screen.dart';
 import 'package:login_logout/screen/login_screen.dart';
@@ -28,6 +30,7 @@ abstract class RouteName {
   static const String updateUserName = "/updateusername";
   static const String updateEmail = "/updateemail";
   static const String updatepassword = "/updatepassword";
+  static const String createpost = "/createnote";
 }
 
 Route? _protectedroute(String path, Widget child, RouteSettings setting) {
@@ -49,6 +52,13 @@ Route? router(RouteSettings setting) {
   //   incomingroute="/login";
   // }
   switch (incomingroute) {
+    case RouteName.createpost:
+      return _protectedroute(
+          incomingroute,
+          BlocProvider(
+              create: (_) => NoteCreateCubit(), child: const CreatePost()),
+          setting);
+
     case RouteName.forgetpassword:
       return _protectedroute(
           incomingroute,
