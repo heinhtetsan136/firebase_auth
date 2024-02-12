@@ -10,6 +10,7 @@ import 'package:login_logout/controller/register/register_bloc.dart';
 import 'package:login_logout/controller/upade_username/update_username_cubic.dart';
 import 'package:login_logout/controller/update_email/update_email_bloc.dart';
 import 'package:login_logout/controller/update_password/update_password_cubic.dart';
+import 'package:login_logout/models/note_model.dart';
 import 'package:login_logout/repositories/AuthService.dart';
 import 'package:login_logout/screen/create_post_screen.dart';
 import 'package:login_logout/screen/forgetpassword_screen.dart';
@@ -30,7 +31,7 @@ abstract class RouteName {
   static const String updateUserName = "/updateusername";
   static const String updateEmail = "/updateemail";
   static const String updatepassword = "/updatepassword";
-  static const String createpost = "/createnote";
+  static const String notes = "/note";
 }
 
 Route? _protectedroute(String path, Widget child, RouteSettings setting) {
@@ -52,11 +53,24 @@ Route? router(RouteSettings setting) {
   //   incomingroute="/login";
   // }
   switch (incomingroute) {
-    case RouteName.createpost:
+    case RouteName.notes:
+      if ((!(setting.arguments == null)) &&
+          ((setting.arguments is! NoteModel))) {
+        return _protectedroute(
+            incomingroute,
+            Scaffold(
+              appBar: AppBar(),
+              body: const Center(
+                child: Text("Bad Request"),
+              ),
+            ),
+            setting);
+      }
       return _protectedroute(
           incomingroute,
           BlocProvider(
-              create: (_) => NoteCreateCubit(), child: const CreatePost()),
+              create: (_) => NoteCubit(setting.arguments as NoteModel?),
+              child: const NoteScreen()),
           setting);
 
     case RouteName.forgetpassword:

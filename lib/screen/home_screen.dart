@@ -6,12 +6,13 @@ import 'package:login_logout/Injection.dart';
 import 'package:login_logout/controller/home/home_bloc.dart';
 import 'package:login_logout/controller/home/home_event.dart';
 import 'package:login_logout/controller/home/home_state.dart';
+import 'package:login_logout/models/note_model.dart';
 import 'package:login_logout/repositories/AuthService.dart';
 import 'package:login_logout/route/router.dart';
 import 'package:starlight_utils/starlight_utils.dart';
 
-void gotoCreateNote() {
-  StarlightUtils.pushNamed(RouteName.createpost);
+void gotoCreateNote([NoteModel? note]) {
+  StarlightUtils.pushNamed(RouteName.notes, arguments: note);
 }
 
 void gotoUpdateScreen() {
@@ -47,6 +48,83 @@ class HomeScreen extends StatelessWidget {
       },
       child: SafeArea(
         child: Scaffold(
+          body: StreamBuilder<List<NoteModel>>(
+              stream: bloc.notestream.stream,
+              builder: (_, snap) {
+                if (snap.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (snap.data == null) {
+                  return const Center(
+                    child: Text("No Data has Found"),
+                  );
+                }
+                return ListView.builder(
+                    itemCount: snap.data!.length,
+                    itemBuilder: (_, i) {
+                      return ListTile(
+                        onTap: () {
+                          gotoCreateNote(snap.data![i]);
+                        },
+                        leading: snap.data![i].userid == bloc.state.user!.uid
+                            ? const Text("Me")
+                            : const Text("Other"),
+                        trailing: SizedBox(
+                          width: 100,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                onPressed: (snap.data![i].userid ==
+                                            bloc.state.user!.uid) ||
+                                        (snap.data![i].acl == "Public")
+                                    ? () {
+                                        gotoCreateNote(snap.data![i]);
+                                      }
+                                    : null,
+                                icon: Icon((snap.data![i].userid ==
+                                            bloc.state.user!.uid) ||
+                                        (snap.data![i].acl == "Private")
+                                    ? Icons.edit
+                                    : Icons.lock_person),
+                              ),
+                              if (snap.data![i].userid == bloc.state.user!.uid)
+                                IconButton(
+                                    onPressed: () async {
+                                      final result =
+                                          await StarlightUtils.dialog(
+                                              AlertDialog(
+                                        actions: [
+                                          OutlinedButton(
+                                              onPressed: () {
+                                                StarlightUtils.pop(
+                                                    result: true);
+                                              },
+                                              child: const Text("Delete")),
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                StarlightUtils.pop();
+                                              },
+                                              child: const Text("Cancel"))
+                                        ],
+                                        title: const Text(
+                                            "Are You Sure To Delete It"),
+                                      ));
+                                      if (result == true) {
+                                        bloc.delete(snap.data![i]);
+                                      }
+                                    },
+                                    icon: const Icon(Icons.delete)),
+                            ],
+                          ),
+                        ),
+                        title: Text(snap.data![i].title),
+                        subtitle: Text(snap.data![i].acl),
+                      );
+                    });
+              }),
           key: bloc.drawerkey,
           floatingActionButton: const FloatingActionButton(
               onPressed: gotoCreateNote, child: Icon(Icons.edit)),
@@ -64,15 +142,10 @@ class HomeScreen extends StatelessWidget {
                               previous.user?.photoURL != current.user?.photoURL,
                           builder: (_, state) {
                             bool isNOtuploaded = state.user?.photoURL == null;
+                            print(isNOtuploaded);
                             if (isNOtuploaded) {
-                              return CircleAvatar(
-                                child: !isNOtuploaded
-                                    ? null
-                                    : Text((state.user?.displayName ??
-                                            state.user?.email ??
-                                            "NA")[0]
-                                        .toUpperCase()),
-                              );
+                              return const CircleAvatar(
+                                  child: Icon(Icons.person));
                             }
                             return FutureBuilder(
                                 future: Injection<FirebaseStorage>()
