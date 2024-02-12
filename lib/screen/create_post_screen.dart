@@ -104,7 +104,10 @@ class NoteScreen extends StatelessWidget {
                   ),
                 ),
               ] else ...[
-                HtmlWidget(bloc.note!.description),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: HtmlWidget(bloc.note!.description),
+                ),
               ]
             ],
           ),

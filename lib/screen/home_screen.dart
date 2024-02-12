@@ -6,6 +6,7 @@ import 'package:login_logout/Injection.dart';
 import 'package:login_logout/controller/home/home_bloc.dart';
 import 'package:login_logout/controller/home/home_event.dart';
 import 'package:login_logout/controller/home/home_state.dart';
+import 'package:login_logout/controller/theme/theme_cubit.dart';
 import 'package:login_logout/models/note_model.dart';
 import 'package:login_logout/repositories/AuthService.dart';
 import 'package:login_logout/route/router.dart';
@@ -39,6 +40,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<HomeBloc>();
+    final themecubit = context.read<ThemeCubit>();
     return BlocListener<HomeBloc, HomeBaseState>(
       listener: (_, state) async {
         if (state is HomeSignoutState) {
@@ -64,64 +66,87 @@ class HomeScreen extends StatelessWidget {
                 return ListView.builder(
                     itemCount: snap.data!.length,
                     itemBuilder: (_, i) {
-                      return ListTile(
-                        onTap: () {
-                          gotoCreateNote(snap.data![i]);
-                        },
-                        leading: snap.data![i].userid == bloc.state.user!.uid
-                            ? const Text("Me")
-                            : const Text("Other"),
-                        trailing: SizedBox(
-                          width: 100,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                onPressed: (snap.data![i].userid ==
-                                            bloc.state.user!.uid) ||
-                                        (snap.data![i].acl == "Public")
-                                    ? () {
-                                        gotoCreateNote(snap.data![i]);
-                                      }
-                                    : null,
-                                icon: Icon((snap.data![i].userid ==
-                                            bloc.state.user!.uid) ||
-                                        (snap.data![i].acl == "Private")
-                                    ? Icons.edit
-                                    : Icons.lock_person),
+                      return Card(
+                        margin: const EdgeInsets.only(
+                            left: 10, right: 10, bottom: 5, top: 5),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 50,
+                              width: context.width,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  const Icon(
+                                    Icons.person,
+                                    size: 35,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(snap.data![i].userid ==
+                                          bloc.state.user!.uid
+                                      ? "Me"
+                                      : snap.data![i].name ?? "Annonymous")
+                                ],
                               ),
-                              if (snap.data![i].userid == bloc.state.user!.uid)
-                                IconButton(
-                                    onPressed: () async {
-                                      final result =
-                                          await StarlightUtils.dialog(
-                                              AlertDialog(
-                                        actions: [
-                                          OutlinedButton(
-                                              onPressed: () {
-                                                StarlightUtils.pop(
-                                                    result: true);
-                                              },
-                                              child: const Text("Delete")),
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                StarlightUtils.pop();
-                                              },
-                                              child: const Text("Cancel"))
-                                        ],
-                                        title: const Text(
-                                            "Are You Sure To Delete It"),
-                                      ));
-                                      if (result == true) {
-                                        bloc.delete(snap.data![i]);
-                                      }
-                                    },
-                                    icon: const Icon(Icons.delete)),
-                            ],
-                          ),
+                            ),
+                            ListTile(
+                              onTap: () {
+                                gotoCreateNote(snap.data![i]);
+                              },
+                              trailing: SizedBox(
+                                width: 100,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    IconButton(
+                                      onPressed: (snap.data![i].userid ==
+                                                  bloc.state.user!.uid) ||
+                                              (snap.data![i].acl == "Public")
+                                          ? () {
+                                              gotoCreateNote(snap.data![i]);
+                                            }
+                                          : null,
+                                      icon: const Icon(Icons.edit),
+                                    ),
+                                    if (snap.data![i].userid ==
+                                        bloc.state.user!.uid)
+                                      IconButton(
+                                          onPressed: () async {
+                                            final result =
+                                                await StarlightUtils.dialog(
+                                                    AlertDialog(
+                                              actions: [
+                                                OutlinedButton(
+                                                    onPressed: () {
+                                                      StarlightUtils.pop(
+                                                          result: true);
+                                                    },
+                                                    child:
+                                                        const Text("Delete")),
+                                                ElevatedButton(
+                                                    onPressed: () {
+                                                      StarlightUtils.pop();
+                                                    },
+                                                    child: const Text("Cancel"))
+                                              ],
+                                              title: const Text(
+                                                  "Are You Sure To Delete It"),
+                                            ));
+                                            if (result == true) {
+                                              bloc.delete(snap.data![i]);
+                                            }
+                                          },
+                                          icon: const Icon(Icons.delete)),
+                                  ],
+                                ),
+                              ),
+                              title: Text(snap.data![i].title),
+                              subtitle: Text(snap.data![i].acl),
+                            ),
+                          ],
                         ),
-                        title: Text(snap.data![i].title),
-                        subtitle: Text(snap.data![i].acl),
                       );
                     });
               }),
@@ -214,6 +239,14 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                 )),
+                BlocBuilder<ThemeCubit, ThemeMode>(builder: (_, state) {
+                  return CheckboxListTile(
+                      title: const Text("Dark Theme"),
+                      value: state == ThemeMode.dark,
+                      onChanged: (_) {
+                        themecubit.toggle();
+                      });
+                }),
                 ListTile(
                   onTap: () {
                     bloc.add(const Singout());

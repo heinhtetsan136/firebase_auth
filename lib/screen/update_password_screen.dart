@@ -79,7 +79,8 @@ class UpdatePassword extends StatelessWidget {
                     if (v == null) return "Type your password";
                     return null;
                   },
-                  decoration: const InputDecoration(labelText: "Username"),
+                  decoration:
+                      const InputDecoration(labelText: "Type New Password"),
                 ),
               ),
               TextFormField(

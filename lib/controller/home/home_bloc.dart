@@ -120,6 +120,9 @@ class HomeBloc extends Bloc<HomeBaseEvent, HomeBaseState> {
   }
 
   void delete(NoteModel model) {
+    note.remove(model);
+
+    notestream.sink.add(note);
     db.collection("note").doc(model.id).delete();
   }
 }

@@ -41,23 +41,22 @@ class NoteCubit extends Cubit<NoteCreateBaseState> {
 
       final doc = db.collection("/note").doc(this.note?.id);
       final NoteModel note = NoteModel(
+          name: user.currentUser!.displayName ?? "Annonymous",
           userid: user.currentUser!.uid,
           id: doc.id,
           title: titleController.text,
           acl: acl,
           description: html ?? "");
-      await doc.set(note.toJson(), SetOptions(merge: true)
-          // SetOptions(mergeFields: [
-          //   "title",
-          //   if (this.note?.userid == note.userid) "acl",
-          //   "description"
-          // ])
-          // SetOptions(mergeFields: [
-          //   "title",
-          //   if (this.note?.userid == note.userid) "acl",
-          //   "description"
-          // ]));
-          );
+      await doc.set(
+          note.toJson(),
+          this.note == null
+              ? null
+              : SetOptions(mergeFields: [
+                  "title",
+                  if (this.note?.userid == note.userid) "acl",
+                  "description"
+                ]));
+
       emit(const NoteCreateSucessState());
     } on FirebaseException catch (e) {
       emit(NoteCreateFailedState(e.message.toString()));

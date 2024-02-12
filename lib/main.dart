@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login_logout/Injection.dart';
+import 'package:login_logout/controller/theme/theme_cubit.dart';
 import 'package:login_logout/route/router.dart';
+import 'package:login_logout/theme/dark_theme.dart';
+import 'package:login_logout/theme/light_theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:starlight_utils/starlight_utils.dart';
 
 Future<void> main() async {
@@ -19,57 +24,31 @@ Future<void> main() async {
 }
 
 final theme = ThemeData.light();
+final darktheme = ThemeData.dark();
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: StarlightUtils.navigatorKey,
+    return BlocProvider(
+      create: (_) => ThemeCubit(
+          Injection<SharedPreferences>().getBool("current_theme") == true
+              ? ThemeMode.dark
+              : ThemeMode.light),
+      child: Builder(builder: (newcontext) {
+        return BlocBuilder<ThemeCubit, ThemeMode>(builder: (context, state) {
+          return MaterialApp(
+            navigatorKey: StarlightUtils.navigatorKey,
 
-      ///important
-      theme: theme.copyWith(
-          floatingActionButtonTheme: const FloatingActionButtonThemeData(
-            backgroundColor: Colors.blue,
-            foregroundColor: Colors.white,
-          ),
-          colorScheme: const ColorScheme.light().copyWith(
-            primary: Colors.blue,
-          ),
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.blue,
-            foregroundColor: Colors.white,
-            elevation: 1,
-          ),
-          drawerTheme: DrawerThemeData(
-              width: context.width * 0.7,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(9)),
-              backgroundColor: Colors.white),
-          // colorScheme: theme.colorScheme.copyWith(
-          //   // primary: const Color.fromARGB(255, 6, 125, 230),
-          // ),
-          textButtonTheme: const TextButtonThemeData(
-              style: ButtonStyle(
-            foregroundColor: MaterialStatePropertyAll(Colors.blue),
-          )),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ButtonStyle(
-              foregroundColor: const MaterialStatePropertyAll(Colors.white),
-              backgroundColor: const MaterialStatePropertyAll(Colors.blue),
-              shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4))),
-            ),
-          ),
-          inputDecorationTheme: InputDecorationTheme(
-              floatingLabelStyle: TextStyle(color: Colors.blue.shade300),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blue.shade300),
-              ),
-              isDense: true,
-              border: const OutlineInputBorder())),
-      onGenerateRoute: router,
+            ///important
+            themeMode: state,
+            theme: lighttheme(theme, context),
+            darkTheme: darkTheme(darktheme, context),
+            onGenerateRoute: router,
+          );
+        });
+      }),
     );
   }
 }

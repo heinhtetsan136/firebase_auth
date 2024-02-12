@@ -5,10 +5,14 @@ import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:login_logout/firebase_options.dart';
 import 'package:login_logout/repositories/AuthService.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final Injection = GetIt.instance;
 
 Future<void> setup() async {
+  final SharedPreferences sharedPreferences =
+      await SharedPreferences.getInstance();
+  Injection.registerLazySingleton(() => sharedPreferences);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   Injection.registerSingleton(AuthService(),
       dispose: (instance) => instance.dispose());

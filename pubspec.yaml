@@ -22,6 +22,7 @@ dependencies:
   rich_editor: ^0.0.8
   cloud_firestore: ^4.15.3
   flutter_widget_from_html: ^0.14.11
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:
