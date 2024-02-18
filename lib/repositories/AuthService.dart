@@ -74,6 +74,27 @@ class AuthService {
     });
   }
 
+  String token = "";
+  int? id;
+
+  Future<void> requestOTP() async {
+    await _auth.verifyPhoneNumber(
+        verificationCompleted: (cre) {},
+        verificationFailed: (error) {},
+        codeSent: (token, id) {
+          this.token = token;
+          this.id = id;
+        },
+        codeAutoRetrievalTimeout: (ret) {});
+  }
+
+  Future<void> verifyOTP(String sms) async {
+    try {
+      await _auth.signInWithCredential(
+          PhoneAuthProvider.credential(verificationId: token, smsCode: sms));
+    } catch (e) {}
+  }
+
   Future<Response> reset(String email) async {
     return await _try(() async {
       await _auth.sendPasswordResetEmail(email: email);

@@ -23,6 +23,7 @@ ThemeData lighttheme(ThemeData theme, BuildContext context) {
       // colorScheme: theme.colorScheme.copyWith(
       //   // primary: const Color.fromARGB(255, 6, 125, 230),
       // ),
+
       textButtonTheme: const TextButtonThemeData(
           style: ButtonStyle(
         foregroundColor: MaterialStatePropertyAll(Colors.blue),

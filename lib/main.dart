@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login_logout/Injection.dart';
@@ -12,6 +13,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await setup();
+
   // await Injection<AuthService>().currentUser?.updateDisplayName("HHS");
   // await Injection<AuthService>().singout();
   // AuthService().register("heinhtetsan136@gmail.com", "dsjfksj").then(print);
@@ -20,7 +22,14 @@ Future<void> main() async {
   // await FirebaseAuth.instance
   // await Injection<AuthService>().login("test@gmail.com", "123HHhh");
   //     .signInWithEmailAndPassword(email: "test@gmail.com", password: "123HHhh");
-  runApp(const MainApp());
+  runApp(
+    EasyLocalization(
+        supportedLocales: const [Locale('en'), Locale('es')],
+        path:
+            'assets/translations', // <-- change the path of the translation files
+        fallbackLocale: const Locale('en'),
+        child: const MainApp()),
+  );
 }
 
 final theme = ThemeData.light();
@@ -39,6 +48,9 @@ class MainApp extends StatelessWidget {
       child: Builder(builder: (newcontext) {
         return BlocBuilder<ThemeCubit, ThemeMode>(builder: (context, state) {
           return MaterialApp(
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
             navigatorKey: StarlightUtils.navigatorKey,
 
             ///important

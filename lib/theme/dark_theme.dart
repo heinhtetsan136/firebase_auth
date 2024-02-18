@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:starlight_utils/starlight_utils.dart';
 
-Color primarycolor = const Color.fromARGB(204, 103, 102, 112);
+Color primarycolor = const Color.fromARGB(204, 61, 43, 228);
 ThemeData darkTheme(ThemeData theme, BuildContext context) {
   return theme.copyWith(
       floatingActionButtonTheme: FloatingActionButtonThemeData(
@@ -41,8 +41,8 @@ ThemeData darkTheme(ThemeData theme, BuildContext context) {
       ),
       inputDecorationTheme: InputDecorationTheme(
           floatingLabelStyle: TextStyle(color: Colors.blue.shade300),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Color.fromARGB(255, 104, 11, 211)),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: primarycolor),
           ),
           isDense: true,
           border: const OutlineInputBorder()));

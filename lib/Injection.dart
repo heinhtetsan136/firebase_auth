@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
@@ -10,6 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 final Injection = GetIt.instance;
 
 Future<void> setup() async {
+  await EasyLocalization.ensureInitialized();
+
   final SharedPreferences sharedPreferences =
       await SharedPreferences.getInstance();
   Injection.registerLazySingleton(() => sharedPreferences);

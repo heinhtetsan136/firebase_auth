@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -210,7 +211,8 @@ class HomeScreen extends StatelessWidget {
                               current.user?.displayName,
                           builder: (_, state) {
                             print(state.user?.displayName);
-                            return Text(state.user?.displayName ?? "Username");
+                            return Text(
+                                state.user?.displayName ?? "Username".tr());
                           }),
                       accountEmail: BlocBuilder<HomeBloc, HomeBaseState>(
                           buildWhen: (previous, current) =>
@@ -247,6 +249,21 @@ class HomeScreen extends StatelessWidget {
                         themecubit.toggle();
                       });
                 }),
+                ListTile(
+                  title: const Text("Language"),
+                  trailing: DropdownButton(
+                      value: context.locale.languageCode == "en" ? "en" : "mm",
+                      items: ["en", "mm"]
+                          .map((e) => DropdownMenuItem(
+                                value: e,
+                                child: Text(e),
+                              ))
+                          .toList(),
+                      onChanged: (v) {
+                        print("language is $v");
+                        context.setLocale(Locale(v == "en" ? "en" : "es"));
+                      }),
+                ),
                 ListTile(
                   onTap: () {
                     bloc.add(const Singout());

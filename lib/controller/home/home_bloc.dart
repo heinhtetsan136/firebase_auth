@@ -104,7 +104,8 @@ class HomeBloc extends Bloc<HomeBaseEvent, HomeBaseState> {
       final fullpath = await point.putFile(File(image.path));
       await auth.currentUser?.updatePhotoURL(fullpath.ref.fullPath);
     });
-    on<Singout>((event, emit) {
+    on<Singout>((event, emit) async {
+      await auth.singout();
       emit(const HomeSignoutState());
     });
   }
